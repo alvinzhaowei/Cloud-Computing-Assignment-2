@@ -15,6 +15,8 @@ access_token_secret = "s6FTHy9ZWDcEaIWXxE90c8gm7OakW0DE60qlMVreKcY1A"
 consumer_key = "2VP6A9p8t8XA48dLD8RUFubUr"
 consumer_secret = "55A3K54NolROQDlqATzcIAQ4OeCpx1nd3icupthWlNv3gVsxgp"
 
+GEOBOX_MELBOURNE = [144.4427490234, -38.2338654156, 145.546875, -37.4835765504]
+
 file_path_streaming = './streaming.txt'
 file_path_search = './search.txt'
 count = 0  # a global varaible for tweets number counting with streaming API chosen
@@ -79,8 +81,8 @@ class StdOutListener(StreamListener):
     def on_error(self, status):
         if status == 420:
             print status
-            sys.exit()
-            # return False
+            # sys.exit()
+            return False
 
 
 def main():
@@ -126,7 +128,7 @@ def main():
                     break
                 else:
                     stream = Stream(auth, l)
-                    stream.filter(track=term)
+                    stream.filter(locations=GEOBOX_MELBOURNE)
             except Exception as e:
                 print e
                 continue
