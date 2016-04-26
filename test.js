@@ -15,7 +15,7 @@ function initMap() {
   var layer = new google.maps.FusionTablesLayer({
     query: {
       select: 'geometry',
-      from: '1SLBrU0TyK4PRtHO5GOeFjNAPV-npESHICtcclPHU'
+      from: '1rUgiVF6uU_VmyYEvleWrHm8o6ptKjcHAu9GSt3KD'
     },
     styles: [{
       polygonOptions: {
