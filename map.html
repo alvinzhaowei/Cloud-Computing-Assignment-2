@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to Our Map Demonstration!</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <script>
+      function initMap() {
+        var myCenter =new google.maps.LatLng(-37.796072, 144.961174);
+        var location =new google.maps.LatLng(-37.793742, 144.938642);
+        var mapProp = {
+          center:myCenter,
+          zoom:12,
+          mapTypeId:google.maps.MapTypeId.ROADMAP
+        };
+        var map=new google.maps.Map(document.getElementById("map"), mapProp);
+
+        var marker1=new google.maps.Marker({
+        position:myCenter,
+        });
+
+        var marker2=new google.maps.Marker({
+        position:location,
+        });
+
+        marker1.setMap(map);
+        marker2.setMap(map);
+
+        var infowindow1 = new google.maps.InfoWindow({
+  content:"Hello, this is melbourne uni!"
+  });
+
+        var infowindow2 = new google.maps.InfoWindow({
+  content:"Hello, I do not know where you are!"
+  }); 
+
+google.maps.event.addListener(marker1, 'click', function() {
+  infowindow1.open(map,marker1);
+  });
+
+google.maps.event.addListener(marker2, 'click', function() {
+  infowindow2.open(map,marker2);
+  });
+
+  var layer = new google.maps.FusionTablesLayer({
+    query: {
+      select: 'geometry',
+      //from: '1rUgiVF6uU_VmyYEvleWrHm8o6ptKjcHAu9GSt3KD'
+      from: '1R7zxUYlKaZDOsipEq1xTAEmijnOA4IiQQtH0dAeL'
+    },
+    // styles: [{
+    //   polygonOptions: {
+    //     fillColor: '#0000C6',
+    //     fillOpacity: 0.3
+    //     }
+    //   }, {
+    //     where: 'Population > 10000000',
+    //     polygonOptions: {
+    //     fillColor: '#FF0000',
+    //     fillOpacity: 0.3
+    //     }
+    //   }, {
+    //     where: 'Population > 1000000',
+    //     polygonOptions: {
+    //     fillColor: '#007979',
+    //     fillOpacity: 0.3
+    //     }
+    //   }, {
+    //     where: 'Population > 5000000',
+    //     polygonOptions: {
+    //     fillColor: '#2894FF',
+    //     fillOpacity: 0.3
+    //     }
+    //   }]
+  });
+  layer.setMap(map);
+
+      
+      }
+    </script>
+    <div id="map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEs-wAbLP69OwLEx4SdQUEYdhfonjWHr0&callback=initMap"
+    async defer></script>
+  </body>
+</html>
