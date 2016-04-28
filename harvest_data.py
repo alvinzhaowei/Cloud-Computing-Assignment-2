@@ -15,17 +15,19 @@ access_token_secret = "s6FTHy9ZWDcEaIWXxE90c8gm7OakW0DE60qlMVreKcY1A"
 consumer_key = "2VP6A9p8t8XA48dLD8RUFubUr"
 consumer_secret = "55A3K54NolROQDlqATzcIAQ4OeCpx1nd3icupthWlNv3gVsxgp"
 
-couchdb_server_ip_address = 'http://125.151.58.68:5984/'
-
 GEOBOX_MELBOURNE = [144.4427490234, -38.2338654156, 145.546875, -37.4835765504]
 
+file_path_streaming = './streaming.txt'
+file_path_search = './search.txt'
 count = 0  # a global varaible for tweets number counting with streaming API chosen
 doc_id = None  # a global varaible for recording the id of the doc in database
-
+# tweets_doc = {}
+tweets_set = set()
+f_streaming = open(file_path_streaming, 'a')
 
 
 def initialize_db(db_name):
-    couch = couchdb.Server(couchdb_server_ip_address)
+    couch = couchdb.Server()
     try:
         db = couch[db_name]
         # print 'The existing DB: \'%s\' will be used...' % db_name
@@ -35,8 +37,17 @@ def initialize_db(db_name):
         print 'DB: \'%s\' has been created' % db_name
         return db
 
+'''
+def is_duplicated(text):
+    if text not in tweets_set:
+        tweets_set.add(text)
+        return False
+    else:
+        return True
+'''
 
 def write_data_to_db(data):
+    '''
     db = initialize_db(sys.argv[3])
     global doc_id
     global count
@@ -47,17 +58,25 @@ def write_data_to_db(data):
         doc = db[doc_id]
         doc[count] = data
         db[doc.id] = doc
+    '''
+    db = initialize_db(sys.argv[3])
+    global count
+    doc = {count: data}
+    db.save(doc)
 
 
 # This is a basic listener that just prints received tweets to stdout.
 class StdOutListener(StreamListener):
     def on_data(self, data):
         global count
+        global f_streaming
         if len(sys.argv) == 4:
+            f_streaming.write(data)
             # tweets_doc[count] = data
             write_data_to_db(data)
         elif len(sys.argv) == 5:
             if count < int(sys.argv[4]):
+                f_streaming.write(data)
                 write_data_to_db(data)
             else:
                 sys.exit()
@@ -92,15 +111,20 @@ def main():
 
     if api_type == 'search':
         api = tweepy.API(auth)
-        for tweet in tweepy.Cursor(api.search, q=term).items(int(how_many_tweets_wanted)):
-            try:
-                json_str = json.dumps(tweet._json)
-                global count
-                # tweets_doc[count] = json_str
-                write_data_to_db(json_str)
-                count += 1
-            except Exception as e:
-                print e
+        with open(file_path_search, 'a') as f:
+            for tweet in tweepy.Cursor(api.search, q="*", geocode="-37.817999,145.008244,20km").items(int(how_many_tweets_wanted)):
+                try:
+                    json_str = json.dumps(tweet._json)
+                    #if not is_duplicated(json_str):
+                    tweets_set.add(json_str)
+                    global count
+                    print count, json_str
+                    # tweets_doc[count] = json_str
+                    f.write(json_str + '\n')
+                    write_data_to_db(json_str)
+                    count += 1
+                except Exception as e:
+                    print e
 
             f.close()
     elif api_type == 'streaming':
