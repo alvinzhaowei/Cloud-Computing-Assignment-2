@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 __author__ = 'songjian'
 import tweepy
@@ -22,7 +23,7 @@ MAX_TWEETS = 5000000
 TWEETS_PER_QRY = 100
 
 GEOBOX_MELBOURNE = [144.4427490234, -38.2338654156, 145.546875, -37.4835765504]
-GEO_CIRCLE_INFO = "-37.817999,145.008244,20km"
+GEO_CIRCLE_INFO = "-38.106427,145.340804,14km"
 
 file_path_streaming = './streaming.txt'
 file_path_search = './tweet_id.txt'
@@ -34,7 +35,7 @@ f_streaming = open(file_path_streaming, 'a')
 
 
 def initialize_db(db_name):
-    couch = couchdb.Server()
+    couch = couchdb.Server('http://115.146.94.188:5984/')
     try:
         db = couch[db_name]
         # print 'The existing DB: \'%s\' will be used...' % db_name
