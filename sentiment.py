@@ -18,7 +18,7 @@ english_stop_words = set(nltk.corpus.stopwords.words('english'))
 
 # preprocess single line tweet
 def preprocess(tweet):
-    remove_hashtag_tweet = remove_hashtag_tweet.lower()  # lower case each line with out string start with '#'
+    tweet = tweet.lower()  # lower case each line with out string start with '#'
     remove_at_tweet = re.sub(re_at, "", tweet).strip()  # each line remove at
     remove_http_tweet = re.sub(re_http, "", remove_at_tweet).strip()  # each line remove http
     remove_hashtag_tweet = re.sub(re_hash_tag, "", remove_http_tweet).strip()  # remove the string start with '#' for each line
