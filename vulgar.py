@@ -26,7 +26,7 @@ class Tweet(Document):
 	_id = TextField()
 	_rec = TextField()
 	text = TextField()
-	geo = TextField()
+	geo = DictField(Mapping.build(type = TextField(), coordinates = TextField()))
 	
 
 	
