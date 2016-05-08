@@ -10,7 +10,7 @@ server = couchdb.Server('http://115.146.95.129:5984/',full_commit = True, sessio
 db = server['dstwitter']
 #db = server['twitter']     # the name of the database
 
-# server = couchdb.Server('http://127.0.0.1:5984//',full_commit = True, session = None)   # the url of the server
+# server = couchdb.Server('http://127.0.0.1:5984/',full_commit = True, session = None)   # the url of the server
 # db = server['mydatabase']    # the name of the database
 # dbstore = server.create("myresult")
 try:
@@ -80,8 +80,41 @@ class Tweet(Document):
     created_time = TextField()
     sentiment = IntegerField()
 
+
+def couchdb_pager(db, view_name='_all_docs',
+                  startkey=None, startkey_docid=None,
+                  endkey=None, endkey_docid=None, bulk=5000):
+    # Request one extra row to resume the listing there later.
+    options = {'limit': bulk + 1}
+    if startkey:
+        options['startkey'] = startkey
+        if startkey_docid:
+            options['startkey_docid'] = startkey_docid
+    if endkey:
+        options['endkey'] = endkey
+        if endkey_docid:
+            options['endkey_docid'] = endkey_docid
+    done = False
+    while not done:
+        view = db.view(view_name, **options)
+        rows = []
+        # If we got a short result (< limit + 1), we know we are done.
+        if len(view) <= bulk:
+            done = True
+            rows = view.rows
+        else:
+            # Otherwise, continue at the new start position.
+            rows = view.rows[:-1]
+            last = view.rows[-1]
+            options['startkey'] = last.key
+            options['startkey_docid'] = last.id
+
+        for row in rows:
+            yield row.id
+
       
-for id in db:
+#for id in db:
+for id in couchdb_pager(db):
 
     tweet= Tweet.load(db,id)
     time = tweet.created_time
@@ -128,15 +161,14 @@ print  "Melbourne_South_East", Melbourne_South_East
 print  "Melbourne_West", Melbourne_West
 print  "Mornington_Peninsula", Mornington_Peninsula
 
-doc1 = {"location0":"Melbourne_Inner","statistics0":Melbourne_Inner,
-"location1":"Melbourne_Inner_East","statistics1":Melbourne_Inner_East,
-"location2":"Melbourne_Inner_South","statistics2":Melbourne_Inner_South,
-"location3":"Melbourne_North_East","statistics3":Melbourne_North_East,
-"location4":"Melbourne_North_West","statistics4":Melbourne_North_West,
-"location5":"Melbourne_Outer_East","statistics5":Melbourne_Outer_East,
-"location6":"Melbourne_South_East","statistics6":Melbourne_South_East,
-"location7":"Melbourne_West","statistics7":Melbourne_West,
-"location8":"Mornington_Peninsula","statistics8":Mornington_Peninsula}
+doc1 = {"Melbourne_Inner":Melbourne_Inner,
+"Melbourne_Inner_East":Melbourne_Inner_East,
+"Melbourne_Inner_South":Melbourne_Inner_South,
+"Melbourne_North_East":Melbourne_North_East,
+"Melbourne_North_West":Melbourne_North_West,
+"Melbourne_Outer_East":Melbourne_Outer_East,
+"Melbourne_South_East":Melbourne_South_East,
+"Mornington_Peninsula":Mornington_Peninsula}
 dbstore.save(doc1)
 
 try:
@@ -150,15 +182,15 @@ try:
     process_result(Melbourne_West,Melbourne_West_result)
     process_result(Mornington_Peninsula,Mornington_Peninsula_result)
 
-    doc2 = {"location0":"Melbourne_Inner_result","result0":Melbourne_Inner_result,
-    "location1":"Melbourne_Inner_East_result","result1":Melbourne_Inner_East_result,
-    "location2":"Melbourne_Inner_South_result","result2":Melbourne_Inner_South_result,
-    "location3":"Melbourne_North_East_result","result3":Melbourne_North_East_result,
-    "location4":"Melbourne_North_West_result","result4":Melbourne_North_West_result,
-    "location5":"Melbourne_Outer_East_result","result5":Melbourne_Outer_East_result,
-    "location6":"Melbourne_South_East_result","result6":Melbourne_South_East_result,
-    "location7":"Melbourne_West_result","result7":Melbourne_West_result,
-    "location8":"Mornington_Peninsula_result","result8":Mornington_Peninsula_result}
+    doc2 = {"Melbourne_Inner_result":Melbourne_Inner_result,
+    "Melbourne_Inner_East_result":Melbourne_Inner_East_result,
+    "Melbourne_Inner_South_result":Melbourne_Inner_South_result,
+    "Melbourne_North_East_result":Melbourne_North_East_result,
+    "Melbourne_North_West_result":Melbourne_North_West_result,
+    "Melbourne_Outer_East_result":Melbourne_Outer_East_result,
+    "Melbourne_South_East_result":Melbourne_South_East_result,
+    "Melbourne_West_result":Melbourne_West_result,
+    "Mornington_Peninsula_result":Mornington_Peninsula_result}
     dbstore.save(doc2)
 
     print  "Melbourne_Inner_result", Melbourne_Inner_result
