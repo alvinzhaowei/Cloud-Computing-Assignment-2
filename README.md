@@ -1,6 +1,5 @@
-# Cloud-Computing-Assignment-2
-This is for the cloud computing assignment 2 team work
+# Cloud-computing Porject
 
-Hi, there.
-
-Let's enjoy our teamwork. Best wishes to everyone. 
+We harvest tweets via twitter provided API and store them in Mongodb.
+After that, we do analysis such as sentiment evaluation and location distribution.
+Then the data is visualizated on website.
