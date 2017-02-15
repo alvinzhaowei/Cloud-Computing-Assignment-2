@@ -1,0 +1,37 @@
+- name: Set up harvesters on all machines.
+  hosts: vms
+  user: ubuntu
+  sudo: yes
+  tasks:
+     - name: upload shell.
+       copy: src=harvester.sh dest=/home/ubuntu/
+     - name: Install pip and python modules for Twitter harvester.
+       script: harvester.sh
+     - name: Send host list.
+       copy: src=hosts dest=/home/ubuntu/
+     - name: Send harvester_data.py
+       copy: src=harvester_data.py dest=/home/ubuntu/
+     - name: Launch Twitter harvester
+       shell: nohup python harvester_data.py &
+
+- name: Setup up couchdb on single machine.
+  hosts: couchdb
+  user: ubuntu
+  sudo: yes
+  tasks:
+     - name: upload shell.
+       copy: src=couchdb.sh dest=/home/ubuntu/
+     - name: install couchdb 
+       script: couchdb.sh
+
+- name: Setup up webserver on single machine.
+  hosts: webservers
+  user: ubuntu
+  sudo: yes
+  tasks:
+     - name: upload shell.
+       copy: src=webserver.sh dest=/home/ubuntu/
+     - name: install webserver 
+       script: webserver.sh
+     - name: upload htmls
+       cop: src=web dest=/var/www/web

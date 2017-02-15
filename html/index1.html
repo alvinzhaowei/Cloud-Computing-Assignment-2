@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Highcharts Example</title>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <style type="text/css">
+        ${demo.css}
+    </style>
+    <script type="text/javascript">
+        var tweet;
+        $.ajax({
+
+            url: "http://115.146.95.129:5984/district_happy/_design/output/_view/sentiment",
+
+            type: "GET",
+            dataType: 'JSON',
+            success: function (data) {
+                tweet = data["rows"][0]["value"];
+                var to_be_draw = [];
+                $.each(tweet, function (key,value) {
+                    t = {};
+                    t["name"] = key
+                    t["data"] = value;
+                    to_be_draw.push(t);
+                });
+
+
+                $('#container').highcharts({
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Nine Areas Sentiment Analysis'
+                    },
+     
+                    xAxis: {
+                       categories: [
+                        'Mel_Inner', 
+                        'Melb_Inner_East', 
+                        'Mel_Inner_South',
+                        'Mel_North_East', 
+                        'Mel_North_West', 
+                        'Mel_Outer_East',
+                        'Mel_South_East', 
+                        'Mel_West', 
+                        'Mornington_Peninsula',
+                        'Total'
+                    ],
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Sentiment Value'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.2f} </b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: to_be_draw
+                });
+            }
+        });
+
+    </script>
+</head>
+<body>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</body>
+</html>
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

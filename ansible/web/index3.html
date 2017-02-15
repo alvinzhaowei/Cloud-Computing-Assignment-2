@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Highcharts Example</title>
+
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <style type="text/css">
+${demo.css}
+        </style>
+        <script type="text/javascript">
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Nine Areas Vulgar Word and Wealth Analysis'
+        },
+        // subtitle: {
+        //     text: 'Source: WorldClimate.com'
+        // },
+        xAxis: {
+            categories: [
+                'Mel_Inner', 
+                'Melb_Inner_East', 
+                'Mel_Inner_South',
+                'Mel_North_East', 
+                'Mel_North_West', 
+                'Mel_Outer_East',
+                'Mel_South_East', 
+                'Mel_West', 
+                'Mornington_Peninsula'
+            ],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Sentiment Value'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'vulgar word',
+            data: [2, 1, 21, 0, 1, 5, 2, 0, 0]
+       },
+        {
+               name: 'wealth',
+            data: [82.64/10, 75.57/10, 93.63/10, 86.87/10, 97.26/10, 77.72/10, 95.92/10, 109.46/10, 86.31/10]
+        }
+
+        //,
+        //  {
+        //  name: 'Evening_neutral',
+        //     data: [0.58, 0.67, 0.0, 0.75, 0.87, 0.6, 0.5, 0.64, 0.0]
+        // },
+        // {
+        //     name: 'Morning_neutral',
+        //     data: [0.56, 0.65, 1.0, 0.73, 0.68, 0.73, 0.57, 0.67, 0.0]
+        // },
+         //{
+           // name: 'Evening_Happy',
+            //data: [0.0, 0.13, 0.0, 0.17, 0.07, 0.1, 0.17, 0.09, 0.0]
+       // },
+        // {
+         //   name: 'Morning_Happy',
+         //   data: [0.06, 0.12, 0.0, 0.06, 0.08, 0.0, 0.13, 0.08, 0.0]
+        //}
+
+        ]
+    });
+});
+        </script>
+    </head>
+    <body>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </body>
+</html>

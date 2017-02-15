@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Highcharts Example</title>
+
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <style type="text/css">
+${demo.css}
+        </style>
+        <script type="text/javascript">
+$(function () {
+    // Create the chart
+    $('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Sentiment Analysis'
+        },
+        // subtitle: {
+        //     text: 'Click the columns to view versions. Source: <a href="http://netmarketshare.com">netmarketshare.com</a>.'
+        // },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: 'value of Y'
+            }
+
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    //format: '{point.y:.1f}%'
+                }
+            }
+        },
+
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+        },
+
+        series: [{
+            name: 'Sentiment',
+            colorByPoint: true,
+            data: [{
+
+                name: 'Mel_Inner',
+                y: 0,
+            }, {
+                name: 'Melb_Inner_East', 
+                y: 0,
+            }, {
+                name: 'Mel_Inner_South',
+                y: 0,
+            }, {
+                name: 'Mel_North_East',
+                y: 0,
+            }, {
+                name: 'Mel_North_West', 
+                y: 0,
+            }, {
+                name: 'Mel_Outer_East',
+                y: 0,
+            }, {
+                name: 'Mel_South_East',  
+                y: 0,
+            },{
+                name: 'Mel_West', 
+                y: 0,
+            }, {
+                name: 'Mornington_Peninsula',
+                y: 0,
+            }]
+        }],
+       
+    });
+});
+        </script>
+    </head>
+    <body>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Highcharts Example</title>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <style type="text/css">
+        ${demo.css}
+    </style>
+    <script type="text/javascript">
+        $.ajax({
+
+            url: "http://115.146.95.129:5984/poverty_done/_design/output/_view/poverty_rate",
+
+            type: "GET",
+            dataType: 'JSON',
+            success: function (data) {
+                 districts = [
+                        'Mel_Inner', 
+                        'Melb_Inner_East', 
+                        'Mel_Inner_South',
+                        'Mel_North_East', 
+                        'Mel_North_West', 
+                        'Mel_Outer_East',
+                        'Mel_South_East', 
+                        'Mel_West', 
+                        'Mornington_Peninsula',
+                    ];
+                var to_be_draw = [];
+                for(var i = 0;i < data["rows"].length;++i){
+                    var tweet = data["rows"][i]["value"];
+                    $.each(tweet, function (key,value) {
+                        t = {};
+                        t["name"] = districts[i];
+                        t["y"] = value;
+                        to_be_draw.push(t);
+                    });
+                }
+
+
+                   // Create the chart
+    $('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Poverty Analysis'
+        },
+        // subtitle: {
+        //     text: 'Click the columns to view versions. Source: <a href="http://netmarketshare.com">netmarketshare.com</a>.'
+        // },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: 'value of Y'
+            }
+
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    //format: '{point.y:.1f}%'
+                }
+            }
+        },
+
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+        },
+                     series: [{
+            name: 'Sentiment',
+            colorByPoint: true,
+            data: to_be_draw
+        }],
+                });
+            }
+        });
+
+    </script>
+</head>
+<body>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</body>
+</html>
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
